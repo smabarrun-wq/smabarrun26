@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMABAR RUN 2026 — Daftar Sekarang</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --orange: #FF6B2B;
+  --yellow: #FFD700;
+  --blue: #7DD3FC;
+  --dark: #0F0F1A;
+  --dark2: #1A1A2E;
+  --white: #FFFFFF;
+  --gray: #94A3B8;
+  --light: #F8FAFC;
+  --card: #1E2035;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--dark);
+  color: var(--white);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+.app {
+  width: 100%;
+  max-width: 480px;
+  min-height: 100vh;
+  background: var(--dark2);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero {
+  position: relative;
+  height: 240px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0F0F1A 0%, #1a1040 40%, #0d2a4a 100%);
+}
+
+.hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.6;
+  display: none; /* ganti jadi block setelah foto banner dimasukkan */
+}
+
+.hero-placeholder {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: linear-gradient(135deg, #0F0F1A 0%, #1b1060 50%, #0d3060 100%);
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: -20px; right: -20px;
+  height: 60px;
+  background: var(--dark2);
+  clip-path: polygon(0 100%, 100% 0, 100% 100%);
+  z-index: 2;
+}
+
+.hero-bg-number {
+  position: absolute;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 160px;
+  font-weight: 900;
+  color: rgba(255,255,255,0.04);
+  right: -10px; top: -10px;
+  line-height: 1;
+  user-select: none;
+}
+
+.hero-badge {
+  position: absolute;
+  top: 14px; left: 16px;
+  background: var(--orange);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  z-index: 3;
+}
+
+.hero-content {
+  position: absolute;
+  bottom: 30px; left: 20px;
+  z-index: 3;
+}
+
+.hero-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 46px;
+  font-weight: 900;
+  line-height: 0.95;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+}
+
+.hero-title span {
+  background: linear-gradient(90deg, var(--orange), var(--yellow));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-meta {
+  margin-top: 6px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+  display: flex; align-items: center; gap: 8px;
+}
+
+.hero-meta::before {
+  content: '';
+  display: block;
+  width: 20px; height: 2px;
+  background: var(--orange);
+}
+
+.track-progress {
+  display: flex;
+  align-items: center;
+  padding: 20px 20px 10px;
+  gap: 0;
+}
+
+.track-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  flex: 1;
+  position: relative;
+}
+
+.track-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background: var(--card);
+  z-index: 0;
+}
+
+.track-step.done:not(:last-child)::after {
+  background: linear-gradient(90deg, var(--orange), var(--blue));
+}
+
+.track-dot {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 2px solid #2a2a4a;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gray);
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s;
+}
+
+.track-step.active .track-dot {
+  background: linear-gradient(135deg, var(--orange), var(--yellow));
+  border-color: transparent;
+  color: var(--dark);
+  box-shadow: 0 0 16px rgba(255, 107, 43, 0.5);
+}
+
+.track-step.done .track-dot {
+  background: linear-gradient(135deg, var(--blue), #38BDF8);
+  border-color: transparent;
+  color: white;
+}
+
+.track-label {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--gray);
+  text-align: center;
+}
+
+.track-step.active .track-label { color: var(--orange); }
+.track-step.done .track-label { color: var(--blue); }
+
+.form-page {
+  display: none;
+  padding: 16px 20px 32px;
+  animation: fadeUp 0.3s ease;
+}
+.form-page.active { display: block; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255,107,43,0.3), transparent);
+}
+
+.ticket-grid { display: flex; flex-direction: column; gap: 10px; }
+
+.ticket-card {
+  background: var(--card);
+  border: 2px solid #2a2a4a;
+  border-radius: 14px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ticket-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: #2a2a4a;
+  transition: background 0.2s;
+}
+
+.ticket-card.selected {
+  border-color: var(--orange);
+  background: rgba(255,107,43,0.08);
+}
+.ticket-card.selected::before {
+  background: linear-gradient(180deg, var(--orange), var(--yellow));
+}
+
+.ticket-name { font-weight: 700; font-size: 15px; margin-bottom: 3px; }
+
+.ticket-perks {
+  font-size: 11px;
+  color: var(--gray);
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 5px;
+}
+
+.perk-chip {
+  background: rgba(255,255,255,0.06);
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 10px;
+  color: #CBD5E1;
+}
+
+.ticket-price-block { text-align: right; flex-shrink: 0; }
+
+.ticket-price {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 26px;
+  font-weight: 900;
+  background: linear-gradient(90deg, var(--orange), var(--yellow));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+}
+
+.ticket-price-label { font-size: 9px; color: var(--gray); margin-top: 2px; }
+
+.selected-check {
+  position: absolute;
+  top: 10px; right: 12px;
+  width: 18px; height: 18px;
+  background: var(--orange);
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}
+.ticket-card.selected .selected-check { display: flex; }
+
+.form-group { margin-bottom: 14px; }
+
+.form-group label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--gray);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--card);
+  border: 1.5px solid #2a2a4a;
+  border-radius: 10px;
+  color: var(--white);
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.form-group select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394A3B8' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+
+.form-group select option { background: var(--dark2); }
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(255,107,43,0.15);
+}
+
+.form-group input::placeholder { color: #3a3a5a; }
+
+.form-row { display: flex; gap: 10px; }
+.form-row .form-group { flex: 1; }
+
+.pelajar-section {
+  display: none;
+  background: rgba(14,165,233,0.07);
+  border: 1px solid rgba(14,165,233,0.2);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 14px;
+}
+
+.pelajar-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--blue);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-row { display: flex; gap: 10px; margin-top: 24px; }
+
+.btn {
+  flex: 1;
+  padding: 15px;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.btn:active { transform: scale(0.97); }
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--orange), #ff9500);
+  color: white;
+  box-shadow: 0 6px 20px rgba(255,107,43,0.3);
+}
+
+.btn-primary:hover { box-shadow: 0 8px 28px rgba(255,107,43,0.45); }
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-secondary {
+  background: var(--card);
+  color: var(--gray);
+  border: 1.5px solid #2a2a4a;
+}
+
+/* ── Toast notifikasi ── */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: #1e293b;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  z-index: 9999;
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  white-space: nowrap;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast.success { border-color: rgba(34,197,94,0.4); background: #052e16; }
+.toast.error   { border-color: rgba(239,68,68,0.4);  background: #2d0a0a; }
+.toast.info    { border-color: rgba(255,107,43,0.4); background: #1a0f00; }
+
+.invoice-card {
+  background: var(--card);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.invoice-header {
+  background: linear-gradient(135deg, var(--orange), #ff9500);
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.invoice-header-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.invoice-header-total {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 28px;
+  font-weight: 900;
+}
+
+.invoice-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 13px;
+}
+
+.invoice-row:last-child { border-bottom: none; }
+.invoice-row span:first-child { color: var(--gray); }
+.invoice-row span:last-child { font-weight: 600; }
+
+.bank-card {
+  background: var(--white);
+  border-radius: 14px;
+  padding: 18px;
+  margin: 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.bank-logo {
+  width: 48px; height: 48px;
+  background: #003DA5;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px;
+  font-weight: 900;
+  color: white;
+  letter-spacing: -1px;
+  flex-shrink: 0;
+}
+
+.bank-info { flex: 1; }
+.bank-name { font-size: 11px; color: #64748B; font-weight: 600; }
+.bank-number {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0F172A;
+  letter-spacing: 1px;
+  margin: 2px 0;
+}
+.bank-holder { font-size: 11px; color: #64748B; }
+
+.copy-btn {
+  background: #EFF6FF;
+  color: #3B82F6;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s, transform 0.1s;
+}
+.copy-btn:active { transform: scale(0.95); background: #DBEAFE; }
+
+.upload-zone {
+  border: 2px dashed #2a2a4a;
+  border-radius: 14px;
+  padding: 28px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  background: var(--card);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.upload-zone.dragover,
+.upload-zone:hover {
+  border-color: var(--orange);
+  background: rgba(255,107,43,0.05);
+}
+
+.upload-zone.has-file {
+  border-color: #22c55e;
+  background: rgba(34,197,94,0.05);
+}
+
+.upload-icon { font-size: 32px; margin-bottom: 8px; }
+.upload-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.upload-sub { font-size: 11px; color: var(--gray); }
+
+.upload-input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+.upload-preview {
+  display: none;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 12px;
+}
+
+.upload-preview img {
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.upload-remove {
+  position: absolute;
+  top: 8px; right: 8px;
+  background: rgba(0,0,0,0.7);
+  color: white;
+  border: none;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-status {
+  display: none;
+  margin-top: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  align-items: center;
+  gap: 8px;
+}
+.upload-status.uploading { display: flex; background: rgba(14,165,233,0.12); color: var(--blue); }
+.upload-status.success   { display: flex; background: rgba(34,197,94,0.12);  color: #22c55e; }
+.upload-status.error     { display: flex; background: rgba(239,68,68,0.12);  color: #ef4444; }
+
+.spinner {
+  width: 14px; height: 14px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.admin-note {
+  background: rgba(255,215,0,0.08);
+  border: 1px solid rgba(255,215,0,0.2);
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 12px;
+  color: #FCD34D;
+  line-height: 1.6;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+/* Upload required indicator */
+.upload-required {
+  display: none;
+  margin-top: 8px;
+  font-size: 11px;
+  color: #ef4444;
+  font-weight: 600;
+  text-align: center;
+}
+.upload-required.show { display: block; }
+
+#page4 {
+  display: none;
+  padding: 32px 20px 48px;
+  animation: fadeUp 0.4s ease;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+#page4.active { display: flex; }
+
+.success-ring {
+  width: 96px; height: 96px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--orange), var(--yellow));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 42px;
+  margin-bottom: 20px;
+  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 0 0 12px rgba(255,107,43,0.12), 0 0 0 24px rgba(255,107,43,0.06);
+}
+
+@keyframes popIn {
+  from { transform: scale(0); opacity: 0; }
+  70%  { transform: scale(1.12); }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+.success-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 34px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  line-height: 1;
+  margin-bottom: 8px;
+  background: linear-gradient(90deg, var(--orange), var(--yellow));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.success-sub {
+  font-size: 13px;
+  color: var(--gray);
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+
+.success-summary {
+  width: 100%;
+  background: var(--card);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.summary-header {
+  padding: 12px 18px;
+  background: linear-gradient(90deg, rgba(255,107,43,0.15), rgba(255,215,0,0.08));
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--orange);
+  border-bottom: 1px solid rgba(255,107,43,0.15);
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 11px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 13px;
+}
+
+.summary-row:last-child { border-bottom: none; }
+.summary-row span:first-child { color: var(--gray); }
+.summary-row strong { color: var(--white); }
+.summary-row.highlight strong {
+  background: linear-gradient(90deg, var(--orange), var(--yellow));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 15px;
+}
+
+.whatsapp-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 6px 20px rgba(34,197,94,0.3);
+  margin-top: 8px;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.2s;
+  touch-action: manipulation;
+}
+
+.whatsapp-btn:active { transform: scale(0.97); }
+
+.confetti-wrap {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  overflow: hidden;
+}
+.dot {
+  position: absolute;
+  top: -10px;
+  width: 8px; height: 8px;
+  border-radius: 2px;
+  animation: fall linear forwards;
+}
+@keyframes fall {
+  to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <div class="hero">
+    <!-- Ganti src dengan foto banner asli kamu, lalu hapus display:none di CSS .hero-img -->
+    <img class="hero-img" id="heroBannerImg" src="" alt="SMABAR RUN 2026 Banner">
+    <div class="hero-placeholder" id="heroPlaceholder">
+      <div class="hero-bg-number">26</div>
+    </div>
+    <div class="hero-badge">🏃 Fun Run · 6 Sep 2026</div>
+    <div class="hero-content">
+      <div class="hero-title">
+        SMABAR<br>
+        <span>RUN 2026</span>
+      </div>
+      <div class="hero-meta">SMAN 1 Barru · Sulawesi Selatan</div>
+    </div>
+  </div>
+
+  <div class="track-progress" id="trackProgress">
+    <div class="track-step active" id="ts1">
+      <div class="track-dot">1</div>
+      <div class="track-label">Paket</div>
+    </div>
+    <div class="track-step" id="ts2">
+      <div class="track-dot">2</div>
+      <div class="track-label">Data Diri</div>
+    </div>
+    <div class="track-step" id="ts3">
+      <div class="track-dot">3</div>
+      <div class="track-label">Pembayaran</div>
+    </div>
+  </div>
+
+  <form id="regForm" onsubmit="submitForm(event)">
+
+    <!-- PAGE 1 -->
+    <div id="page1" class="form-page active">
+      <div class="section-label">Pilih Kategori</div>
+      <input type="hidden" id="kategori">
+
+      <div class="ticket-grid">
+        <div class="ticket-card" id="tc1" onclick="pilihPaket(this,'umum_jersey',110000,'Paket Jersey Only')">
+          <div class="selected-check">✓</div>
+          <div>
+            <div class="ticket-name">Paket Jersey Only</div>
+            <div class="ticket-perks"><span class="perk-chip">👕 Jersey</span></div>
+          </div>
+          <div class="ticket-price-block">
+            <div class="ticket-price">110k</div>
+            <div class="ticket-price-label">/ peserta</div>
+          </div>
+        </div>
+
+        <div class="ticket-card" id="tc2" onclick="pilihPaket(this,'pelajar',150000,'Paket Pelajar')">
+          <div class="selected-check">✓</div>
+          <div>
+            <div class="ticket-name">Paket Pelajar</div>
+            <div class="ticket-perks">
+              <span class="perk-chip">🥈 Medali</span>
+              <span class="perk-chip">👕 Jersey</span>
+            </div>
+          </div>
+          <div class="ticket-price-block">
+            <div class="ticket-price">150k</div>
+            <div class="ticket-price-label">/ peserta</div>
+          </div>
+        </div>
+
+        <div class="ticket-card" id="tc3" onclick="pilihPaket(this,'umum_lengkap',175000,'Paket Umum')">
+          <div class="selected-check">✓</div>
+          <div>
+            <div class="ticket-name">Paket Umum</div>
+            <div class="ticket-perks">
+              <span class="perk-chip">🥈 Medali</span>
+              <span class="perk-chip">👕 Jersey</span>
+            </div>
+          </div>
+          <div class="ticket-price-block">
+            <div class="ticket-price">175k</div>
+            <div class="ticket-price-label">/ peserta</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="paketError" style="display:none;margin-top:10px;padding:10px 14px;background:rgba(239,68,68,0.12);border-radius:10px;font-size:12px;color:#ef4444;font-weight:600;">
+        ⚠ Pilih salah satu paket terlebih dahulu!
+      </div>
+
+      <div class="btn-row">
+        <button type="button" class="btn btn-primary" onclick="nextPage(2)">Lanjut →</button>
+      </div>
+    </div>
+
+    <!-- PAGE 2 -->
+    <div id="page2" class="form-page">
+      <div class="section-label">Data Diri</div>
+
+      <div class="form-group">
+        <label>Email Aktif *</label>
+        <input type="email" id="email" required placeholder="contoh@email.com">
+      </div>
+      <div class="form-group">
+        <label>Nama Lengkap *</label>
+        <input type="text" id="namaLengkap" required placeholder="Sesuai kartu identitas">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>WhatsApp *</label>
+          <input type="tel" id="kontakPribadi" required placeholder="08xx">
+        </div>
+        <div class="form-group">
+          <label>Kontak Darurat *</label>
+          <input type="tel" id="kontakDarurat" required placeholder="08xx">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Jenis Kelamin *</label>
+          <select id="jenisKelamin" required>
+            <option value="">-- Pilih --</option>
+            <option>Laki-laki</option>
+            <option>Perempuan</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Usia *</label>
+          <input type="number" id="usia" required placeholder="Tahun" min="5" max="99">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Tempat Lahir *</label>
+          <input type="text" id="tempatLahir" required placeholder="Kota">
+        </div>
+        <div class="form-group">
+          <label>Tanggal Lahir *</label>
+          <input type="date" id="tanggalLahir" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Alamat Lengkap *</label>
+        <input type="text" id="alamatLengkap" required placeholder="Jalan, nomor rumah">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Provinsi *</label>
+          <input type="text" id="provinsi" required placeholder="Provinsi">
+        </div>
+        <div class="form-group">
+          <label>Kota / Kab. *</label>
+          <input type="text" id="kotaKabupaten" required placeholder="Kota/Kab">
+        </div>
+      </div>
+
+      <div class="pelajar-section" id="sectionPelajar">
+        <div class="pelajar-label">🎓 Data Pelajar</div>
+        <div class="form-group">
+          <label>NISN *</label>
+          <input type="text" id="nisn" placeholder="10 digit NISN" maxlength="10">
+        </div>
+        <div class="form-group">
+          <label>Nama Ibu Kandung *</label>
+          <input type="text" id="namaIbu" placeholder="Nama ibu kandung">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Ukuran Jersey *</label>
+          <select id="ukuranJersey" required>
+            <option value="">-- Pilih --</option>
+            <option>S</option><option>M</option><option>L</option>
+            <option>XL</option><option>XXL</option><option>XXXL</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Golongan Darah *</label>
+          <select id="golonganDarah" required>
+            <option value="">-- Pilih --</option>
+            <option>A</option><option>B</option><option>AB</option>
+            <option>O</option><option>Tidak Tahu</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Nama BIB (maks 8 huruf) *</label>
+        <input type="text" id="namaBib" required maxlength="8" placeholder="Contoh: AISYAH"
+               oninput="this.value=this.value.toUpperCase()">
+      </div>
+      <div class="form-group">
+        <label>Riwayat Penyakit</label>
+        <textarea id="riwayatPenyakit" rows="2" placeholder="Kosongkan jika tidak ada"
+          style="background:var(--card);border:1.5px solid #2a2a4a;border-radius:10px;color:var(--white);padding:12px 14px;font-size:14px;font-family:'Inter',sans-serif;width:100%;resize:none;"></textarea>
+      </div>
+
+      <div class="btn-row">
+        <button type="button" class="btn btn-secondary" onclick="goPage(1)">← Kembali</button>
+        <button type="button" class="btn btn-primary" onclick="validasiPage2()">Lanjut →</button>
+      </div>
+    </div>
+
+    <!-- PAGE 3 -->
+    <div id="page3" class="form-page">
+      <div class="section-label">Ringkasan & Pembayaran</div>
+
+      <div class="invoice-card">
+        <div class="invoice-header">
+          <div>
+            <div class="invoice-header-label">Total Tagihan</div>
+            <div style="font-size:11px;opacity:0.8;margin-top:2px;" id="invPaketHeader">-</div>
+          </div>
+          <div class="invoice-header-total" id="invHarga">-</div>
+        </div>
+        <div class="invoice-row"><span>Paket</span><span id="invPaket">-</span></div>
+        <div class="invoice-row"><span>Peserta</span><span id="invNama">-</span></div>
+        <div class="invoice-row"><span>Jersey</span><span id="invJersey">-</span></div>
+        <div class="invoice-row"><span>Nama BIB</span><span id="invBib">-</span></div>
+      </div>
+
+      <div class="section-label" style="margin-top:4px;">Transfer ke</div>
+      <div class="bank-card">
+        <div class="bank-logo">BRI</div>
+        <div class="bank-info">
+          <div class="bank-name">BANK BRI</div>
+          <div class="bank-number">0222-01-016951-53-8</div>
+          <div class="bank-holder">a.n. OSIS SMAN 1 BARRU</div>
+        </div>
+        <button type="button" class="copy-btn" onclick="copyRek(this)">Salin</button>
+      </div>
+
+      <div class="section-label">Upload Bukti Transfer</div>
+      <div class="upload-zone" id="uploadZone"
+           ondragover="event.preventDefault();this.classList.add('dragover')"
+           ondragleave="this.classList.remove('dragover')"
+           ondrop="handleDrop(event)">
+        <input type="file" class="upload-input" id="buktiFoto" accept="image/*"
+               onchange="previewFoto(this)">
+        <div id="uploadPrompt">
+          <div class="upload-icon">📸</div>
+          <div class="upload-title">Tap untuk upload foto</div>
+          <div class="upload-sub">JPG / PNG · Maks 5 MB</div>
+        </div>
+        <div class="upload-preview" id="uploadPreview">
+          <img id="previewImg" src="" alt="Bukti">
+          <button type="button" class="upload-remove" onclick="hapusFoto(event)">✕</button>
+        </div>
+      </div>
+
+      <div class="upload-required" id="uploadRequired">
+        ⚠ Foto bukti transfer wajib diupload!
+      </div>
+
+      <div class="upload-status" id="uploadStatus">
+        <div class="spinner"></div>
+        <span id="uploadStatusText">Mengupload ke Drive...</span>
+      </div>
+
+      <div class="admin-note" style="margin-top:14px;">
+        <span>💡</span>
+        <span>Setelah bukti diterima, hubungi admin WhatsApp untuk konfirmasi.</span>
+      </div>
+
+      <div class="btn-row">
+        <button type="button" class="btn btn-secondary" onclick="goPage(2)">← Kembali</button>
+        <button type="submit" class="btn btn-primary" id="btnKirim">✓ Kirim Bukti</button>
+      </div>
+    </div>
+
+  </form>
+
+  <div id="page4">
+    <div class="success-ring">🏅</div>
+    <div class="success-title">Kamu Terdaftar!</div>
+    <p class="success-sub">
+      Semua data & bukti pembayaran kamu<br>sudah kami terima.
+      Sampai jumpa di<br><strong style="color:#fff;">6 September 2026!</strong> 🎉
+    </p>
+
+    <div style="margin-bottom:20px;width:100%;">
+      <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--orange);text-align:center;margin-bottom:8px;">Nomor BIB Kamu</div>
+      <div style="background:linear-gradient(135deg,#FF6B2B,#FFD700);border-radius:16px;padding:20px;text-align:center;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:56px;font-weight:900;color:white;letter-spacing:4px;line-height:1;text-shadow:0 2px 8px rgba(0,0,0,0.2);" id="sucNomorBIB">0101</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.8);margin-top:4px;font-weight:600;">Simpan nomor ini ya!</div>
+      </div>
+    </div>
+
+    <div class="success-summary">
+      <div class="summary-header">Ringkasan Pendaftaran</div>
+      <div class="summary-row"><span>Nama</span><strong id="sucNama">-</strong></div>
+      <div class="summary-row"><span>Paket</span><strong id="sucPaket">-</strong></div>
+      <div class="summary-row highlight"><span>Total Bayar</span><strong id="sucHarga">-</strong></div>
+      <div class="summary-row"><span>Ukuran Jersey</span><strong id="sucJersey">-</strong></div>
+      <div class="summary-row"><span>Nama BIB</span><strong id="sucBib">-</strong></div>
+    </div>
+
+    <div class="admin-note" style="width:100%;margin-bottom:16px;">
+      <span>📋</span>
+      <span>Hubungi admin WhatsApp untuk konfirmasi pembayaran kamu dan koordinasi hari H.</span>
+    </div>
+
+    <button class="whatsapp-btn" onclick="hubungiAdmin()">
+      💬 Chat Admin WhatsApp
+    </button>
+  </div>
+
+</div>
+
+<div class="toast" id="toastEl"></div>
+
+<div class="confetti-wrap" id="confettiWrap"></div>
+
+<script>
+const SCRIPT_URL  = 'https://script.google.com/macros/s/AKfycbzIBtYWZ_0PdsVJuJVIEyjPgkOPoS85XcVfPCnqL_Q0UXJhnQC13cvGvGf6DjuTMPgA6g/exec';
+const IS_DEMO     = SCRIPT_URL.includes('GANTI_DENGAN_URL_KAMU');
+const NO_ADMIN_WA = '6288268325794';
+const NO_REK      = '022201016951538';
+
+let harga = 0, namaPaket = '', fotoFile = null, fotoBase64 = null;
+let nomorBIBGlobal = '0101';
+
+let toastTimer = null;
+function showToast(msg, type = 'info', durasi = 2500) {
+  const el = document.getElementById('toastEl');
+  el.textContent = msg;
+  el.className = 'toast ' + type;
+  void el.offsetWidth;
+  el.classList.add('show');
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), durasi);
+}
+
+async function ambilNomorBIB() {
+  if (IS_DEMO) { nomorBIBGlobal = '0101'; return; }
+  try {
+    const res  = await fetch(`${SCRIPT_URL}?action=getBIB`);
+    const json = await res.json();
+    if (json.status === 'ok') nomorBIBGlobal = json.nomorBIB;
+  } catch (_) {}
+}
+
+ambilNomorBIB();
+
+function goPage(n) {
+  document.querySelectorAll('.form-page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page' + n).classList.add('active');
+  updateTrack(n);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateTrack(current) {
+  [1,2,3].forEach(i => {
+    const el = document.getElementById('ts' + i);
+    el.classList.remove('active','done');
+    if (i < current)        el.classList.add('done');
+    else if (i === current) el.classList.add('active');
+  });
+}
+
+function nextPage(n) {
+  if (n === 2) {
+    if (!document.getElementById('kategori').value) {
+      document.getElementById('paketError').style.display = 'block';
+      setTimeout(() => document.getElementById('paketError').style.display = 'none', 3000);
+      return;
+    }
+  }
+  goPage(n);
+}
+
+function pilihPaket(el, kat, h, nama) {
+  document.querySelectorAll('.ticket-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('kategori').value = kat;
+  harga = h; namaPaket = nama;
+  document.getElementById('paketError').style.display = 'none';
+
+  const sec = document.getElementById('sectionPelajar');
+  if (kat === 'pelajar') {
+    sec.style.display = 'block';
+    document.getElementById('nisn').setAttribute('required','required');
+    document.getElementById('namaIbu').setAttribute('required','required');
+  } else {
+    sec.style.display = 'none';
+    document.getElementById('nisn').removeAttribute('required');
+    document.getElementById('namaIbu').removeAttribute('required');
+  }
+}
+
+function validasiPage2() {
+  const inputs = document.querySelectorAll('#page2 [required]');
+  for (let inp of inputs) {
+    if (!inp.checkValidity()) {
+      inp.focus();
+      inp.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      showToast('⚠ Lengkapi field: ' + (inp.labels[0]?.textContent || inp.placeholder || 'yang kosong'), 'error', 3000);
+      return;
+    }
+  }
+  const hargaFmt = 'Rp ' + harga.toLocaleString('id-ID');
+  document.getElementById('invPaket').textContent       = namaPaket;
+  document.getElementById('invPaketHeader').textContent = namaPaket;
+  document.getElementById('invHarga').textContent       = hargaFmt;
+  document.getElementById('invNama').textContent        = document.getElementById('namaLengkap').value;
+  document.getElementById('invJersey').textContent      = document.getElementById('ukuranJersey').value;
+  document.getElementById('invBib').textContent         = document.getElementById('namaBib').value;
+  goPage(3);
+}
+
+function previewFoto(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) {
+    showToast('⚠ Ukuran foto maksimal 5 MB!', 'error', 3000);
+    return;
+  }
+  fotoFile = file;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    fotoBase64 = ev.target.result;
+    document.getElementById('previewImg').src              = fotoBase64;
+    document.getElementById('uploadPrompt').style.display  = 'none';
+    document.getElementById('uploadPreview').style.display = 'block';
+    document.getElementById('uploadZone').classList.add('has-file');
+    document.getElementById('uploadRequired').classList.remove('show');
+    showToast('✓ Foto berhasil dipilih', 'success', 2000);
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('uploadZone').classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) {
+    document.getElementById('buktiFoto').files = e.dataTransfer.files;
+    previewFoto(document.getElementById('buktiFoto'));
+  }
+}
+
+function hapusFoto(e) {
+  e.stopPropagation();
+  fotoFile = null; fotoBase64 = null;
+  document.getElementById('buktiFoto').value             = '';
+  document.getElementById('previewImg').src              = '';
+  document.getElementById('uploadPrompt').style.display  = 'block';
+  document.getElementById('uploadPreview').style.display = 'none';
+  document.getElementById('uploadZone').classList.remove('has-file');
+  setUploadStatus('');
+}
+
+function setUploadStatus(state, msg) {
+  const el = document.getElementById('uploadStatus');
+  el.className = 'upload-status';
+  if (!state) return;
+  el.classList.add(state);
+  document.getElementById('uploadStatusText').textContent = msg;
+}
+
+async function kirimKeScript(dataPeserta) {
+  setUploadStatus('uploading', 'Mengirim data & bukti ke panitia...');
+
+  if (IS_DEMO) {
+    await new Promise(r => setTimeout(r, 1800));
+    setUploadStatus('success', '✓ (Demo) Data berhasil dikirim!');
+    return { status: 'ok', nomorBIB: '0101' };
+  }
+
+  try {
+    const params = new URLSearchParams({
+      kategori       : dataPeserta.kategori,
+      email          : document.getElementById('email').value,
+      namaLengkap    : dataPeserta.nama,
+      kontakPribadi  : dataPeserta.wa,
+      kontakDarurat  : document.getElementById('kontakDarurat').value,
+      jenisKelamin   : document.getElementById('jenisKelamin').value,
+      usia           : document.getElementById('usia').value,
+      tempatLahir    : document.getElementById('tempatLahir').value,
+      tanggalLahir   : document.getElementById('tanggalLahir').value,
+      alamatLengkap  : document.getElementById('alamatLengkap').value,
+      provinsi       : document.getElementById('provinsi').value,
+      kotaKabupaten  : document.getElementById('kotaKabupaten').value,
+      nisn           : document.getElementById('nisn').value,
+      namaIbu        : document.getElementById('namaIbu').value,
+      ukuranJersey   : dataPeserta.jersey,
+      namaBib        : dataPeserta.namaBib,
+      golonganDarah  : document.getElementById('golonganDarah').value,
+      riwayatPenyakit: document.getElementById('riwayatPenyakit').value,
+      paket          : dataPeserta.paket,
+      harga          : dataPeserta.harga,
+      wa             : dataPeserta.wa,
+      fileBase64     : fotoBase64 || '',
+    });
+
+    const res  = await fetch(SCRIPT_URL, { method: 'POST', body: params });
+    const json = await res.json();
+
+    if (json.status === 'ok') {
+      setUploadStatus('success', '✓ Data & bukti berhasil dikirim ke panitia!');
+      return json;
+    } else {
+      throw new Error(json.message || 'Gagal');
+    }
+  } catch (err) {
+    setUploadStatus('error', '⚠ Gagal kirim. Coba lagi atau hubungi admin.');
+    return null;
+  }
+}
+
+async function submitForm(e) {
+  e.preventDefault();
+
+  if (!fotoFile) {
+    document.getElementById('uploadRequired').classList.add('show');
+    document.getElementById('uploadZone').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    showToast('📸 Upload foto bukti transfer dulu ya!', 'error', 3500);
+    return;
+  }
+
+  const btnKirim = document.getElementById('btnKirim');
+  btnKirim.disabled = true;
+  btnKirim.textContent = '⏳ Mengirim...';
+
+  await ambilNomorBIB();
+
+  const dataPeserta = {
+    nama     : document.getElementById('namaLengkap').value,
+    paket    : namaPaket,
+    harga    : 'Rp ' + harga.toLocaleString('id-ID'),
+    namaBib  : document.getElementById('namaBib').value,
+    jersey   : document.getElementById('ukuranJersey').value,
+    wa       : document.getElementById('kontakPribadi').value,
+    kategori : document.getElementById('kategori').value,
+  };
+
+  const hasil = await kirimKeScript(dataPeserta);
+  if (!hasil) {
+    btnKirim.disabled = false;
+    btnKirim.textContent = '✓ Kirim Bukti';
+    return;
+  }
+
+  const nomorBIBFinal = hasil.nomorBIB || nomorBIBGlobal;
+
+  document.getElementById('sucNama').textContent     = dataPeserta.nama;
+  document.getElementById('sucPaket').textContent    = dataPeserta.paket;
+  document.getElementById('sucHarga').textContent    = dataPeserta.harga;
+  document.getElementById('sucJersey').textContent   = dataPeserta.jersey;
+  document.getElementById('sucBib').textContent      = dataPeserta.namaBib;
+  document.getElementById('sucNomorBIB').textContent = nomorBIBFinal;
+
+  document.getElementById('regForm').style.display       = 'none';
+  document.getElementById('trackProgress').style.display = 'none';
+  document.getElementById('page4').classList.add('active');
+
+  tembakKonfeti();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function copyRek(btn) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(NO_REK).then(() => {
+      btn.textContent = '✓ Tersalin!';
+      btn.style.background = '#DCFCE7';
+      btn.style.color = '#16a34a';
+      setTimeout(() => {
+        btn.textContent = 'Salin';
+        btn.style.background = '';
+        btn.style.color = '';
+      }, 2000);
+      showToast('✓ Nomor rekening disalin!', 'success');
+    }).catch(() => fallbackCopy(btn));
+  } else {
+    fallbackCopy(btn);
+  }
+}
+
+function fallbackCopy(btn) {
+  const el = document.createElement('textarea');
+  el.value = NO_REK;
+  el.style.position = 'fixed';
+  el.style.opacity = '0';
+  document.body.appendChild(el);
+  el.focus();
+  el.select();
+  try {
+    document.execCommand('copy');
+    btn.textContent = '✓ Tersalin!';
+    setTimeout(() => btn.textContent = 'Salin', 2000);
+    showToast('✓ Nomor rekening disalin!', 'success');
+  } catch(_) {
+    showToast('Salin manual: ' + NO_REK, 'info', 5000);
+  }
+  document.body.removeChild(el);
+}
+
+function hubungiAdmin() {
+  const nama   = document.getElementById('sucNama').textContent;
+  const paket  = document.getElementById('sucPaket').textContent;
+  const hargaT = document.getElementById('sucHarga').textContent;
+  const bib    = document.getElementById('sucBib').textContent;
+  const jersey = document.getElementById('sucJersey').textContent;
+  const noBIB  = document.getElementById('sucNomorBIB').textContent;
+
+  const msg = `Halo Admin SMABAR RUN 2026 👋\n\n` +
+    `Saya sudah mendaftar:\n\n` +
+    `🎽 No. BIB  : ${noBIB}\n` +
+    `👤 Nama     : ${nama}\n` +
+    `🎟️ Paket    : ${paket}\n` +
+    `💰 Total    : ${hargaT}\n` +
+    `🏷️ Nama BIB : ${bib}\n` +
+    `👕 Jersey   : ${jersey}\n\n` +
+    `Bukti transfer sudah saya upload. Mohon konfirmasi. Terima kasih! 🙏`;
+
+  window.open(`https://wa.me/${NO_ADMIN_WA}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+function tembakKonfeti() {
+  const wrap   = document.getElementById('confettiWrap');
+  const colors = ['#FF6B2B','#FFD700','#7DD3FC','#22c55e','#f43f5e','#a855f7'];
+  for (let i = 0; i < 70; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.style.cssText = `
+      left:${Math.random()*100}%;
+      width:${4+Math.random()*8}px;
+      height:${4+Math.random()*8}px;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      animation-duration:${1.2+Math.random()*1.8}s;
+      animation-delay:${Math.random()*0.6}s;
+    `;
+    wrap.appendChild(d);
+  }
+  setTimeout(() => wrap.innerHTML = '', 4000);
+}
+</script>
+</body>
+</html>
